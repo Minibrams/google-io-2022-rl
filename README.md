@@ -25,10 +25,10 @@ To train your model, run:
 python train.py
 ```
 
-Modify `train.py` and `model.py` as you see fit.
+Modify `train.py` and `dqn/model.py` as you see fit.
 
 When running the `train.py` script, your model is run (and trained) against a random agent.
-Your model is saved to a file (`dqn_model.h5`) every 100 games.
+Your model is saved to a file (`dqn_model.h5`) every 10 games.
 
 # Play your model
 To play the connect-four game against your model, run:
