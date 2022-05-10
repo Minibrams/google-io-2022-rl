@@ -1,6 +1,8 @@
 import numpy as np
 from itertools import groupby
 from typing import Iterator, List
+from os import path
+from dqn.agent import Agent
 
 
 def _get_sequences(row: np.ndarray) -> Iterator[np.ndarray]:
@@ -144,30 +146,53 @@ def print_board(board_matrix: np.ndarray):
 
 
 def game_loop():
-    n = 6
-    m = 7
-    board = np.zeros((n, m), dtype=np.int)
+    rows = 6
+    columns = 7
+    board = build_board(rows, columns)
 
     player_one = 'Player 1 (x)'
     player_two = 'Player 2 (o)'
 
     player = player_one
 
+    agent = Agent(
+        gamma=1,
+        epsilon=1.0,
+        alpha=0.0005,
+        input_dims=rows * columns,
+        n_actions=columns,
+        memory_size=1000,
+        batch_size=256,
+        epsilon_end=0.01
+    )
+
+    # If a model is saved, load it to play against it
+    if path.exists(agent.save_to):
+        agent.load()
+
     while True:
         print_board(board)
         print()
 
-        column = int(input(f'{player} to play: '))
-        board = _drop_token(
-            board,
-            column,
-            1 if player == player_one else -1
-        )
+        if player == player_one:
+            # Let the model play
+            column = agent.choose_action(board, get_full_columns(board))
+            board = _drop_token(board, column, 1)
+
+        else:
+            # Let the developer play
+            column = int(input(f'{player} to play: '))
+            board = _drop_token(board, column, -1)
 
         winner = _get_winner(board)
 
         if winner:
+            print_board(board)
             print(f'Winner: {player}!')
+            exit()
+
+        if is_board_full(board):
+            print(f'Board full, game is drawn.')
             exit()
 
         player = player_two if player == player_one else player_one
