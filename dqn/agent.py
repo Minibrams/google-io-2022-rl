@@ -36,6 +36,10 @@ class Agent:
         self.memory.store_transition(state, action, reward, new_state, is_done)
 
     def choose_action(self, state: np.ndarray, closed_columns: List[int]):
+        """
+        Explores or exploits the game state and returns the index
+        of the column to place a token in on the game board.
+        """
 
         # Explore or exploit?
         if random() < self.epsilon:

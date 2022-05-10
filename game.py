@@ -150,8 +150,8 @@ def game_loop():
     columns = 7
     board = build_board(rows, columns)
 
-    player_one = 'Player 1 (x)'
-    player_two = 'Player 2 (o)'
+    player_one = 'Computer (x)'
+    player_two = 'Developer (o)'
 
     player = player_one
 
@@ -171,6 +171,7 @@ def game_loop():
         agent.load()
 
     while True:
+        print()
         print_board(board)
         print()
 
@@ -178,7 +179,7 @@ def game_loop():
             # Let the model play
             column = agent.choose_action(board, get_full_columns(board))
             board = _drop_token(board, column, 1)
-
+            print(f'{player} played: {column}')
         else:
             # Let the developer play
             column = int(input(f'{player} to play: '))
