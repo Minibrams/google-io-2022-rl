@@ -1,8 +1,90 @@
-from ctypes import Union
-from email.generator import Generator
-from typing import Iterator
 import numpy as np
 from itertools import groupby
+from typing import Iterator
+
+
+def _get_sequences(row: np.ndarray) -> Iterator[np.ndarray]:
+    """
+    Yields all contiguous non-zero sequences in a row.
+    """
+    for player, cells in groupby(row):
+        if player:
+            yield list(cells)
+
+
+def _rotate(mat: np.ndarray) -> np.ndarray:
+    """
+    Rotates (with padding) a matrix by 45 degrees, e.g.:
+
+    ```
+    [0, 0, 0, 0, 1]
+    [0, 0, 0, 1, 0]
+    [0, 0, 1, 0, 0]
+    [0, 1, 0, 0, 0]
+    ```
+
+    ... turns into:
+    ```
+    [0, 0, 0, 0]
+    [0, 0, 0, 0]
+    [0, 0, 0, 0]
+    [0, 0, 0, 0]
+    [1, 1, 1, 1]
+    [0, 0, 0, 0]
+    [0, 0, 0, 0]
+    [0, 0, 0, 0]
+    [0, 0, 0, 0]
+    ```
+
+    """
+
+    def pad(n):
+        return [0 for _ in range(n)]
+
+    return np.array([
+        pad(r) + list(row) + pad(len(row) - r - 1)
+        for r, row in enumerate(mat)
+    ]).T
+
+
+def _get_row_winner(board: np.ndarray) -> int:
+    for row in board:
+
+        sequences = _get_sequences(row)
+        sequences = sorted(sequences, key=len, reverse=True)
+
+        if not sequences:
+            continue
+
+        longest = sequences[0]
+        player = longest[0]
+
+        if len(longest) >= 4:
+            return player
+
+    return 0
+
+
+def get_winner(board: np.ndarray) -> int:
+    row_winner = _get_row_winner(board)
+    col_winner = _get_row_winner(board.T)
+    forward_diagonal_winner = _get_row_winner(_rotate(board))
+    backward_diagonal_winner = _get_row_winner(_rotate(reversed(board)))
+
+    return (
+        row_winner if row_winner else
+        col_winner if col_winner else
+        forward_diagonal_winner if forward_diagonal_winner else
+        backward_diagonal_winner if backward_diagonal_winner else
+        0
+    )
+
+
+def drop_token(board: np.ndarray, column: int, token: int) -> np.ndarray:
+    empty_row_indexes, = np.where(board[:, column] == 0)
+    drop_at_row = max(empty_row_indexes)
+    board[drop_at_row, column] = token
+    return board
 
 
 def print_board(board_matrix: np.ndarray):
@@ -22,49 +104,6 @@ def print_board(board_matrix: np.ndarray):
     numbers = ' '.join([str(i) for i in range(n_rows + 1)])
 
     print('\n'.join([numbers] + board))
-
-
-def drop_token(board: np.ndarray, column: int, value: int) -> np.ndarray:
-    empty_row_indexes, = np.where(board[:, column] == 0)
-    drop_at_row = max(empty_row_indexes)
-    board[drop_at_row, column] = value
-    return board
-
-
-def get_sequences(row: np.ndarray) -> Iterator[np.ndarray]:
-    # Yields all contiguous non-zero sequences in a row
-    for player, cells in groupby(row):
-        if player:
-            yield list(cells)
-
-
-def get_row_winner(board: np.ndarray) -> int:
-    for row in board:
-
-        sequences = get_sequences(row)
-        sequences = sorted(sequences, key=len, reverse=True)
-
-        if not sequences:
-            continue
-
-        longest = sequences[0]
-        player = longest[0]
-
-        if len(longest) >= 4:
-            return player
-
-    return 0
-
-
-def get_winner(board: np.ndarray) -> int:
-    row_winner = get_row_winner(board)
-    col_winner = get_row_winner(board.T)
-
-    return (
-        row_winner if row_winner else
-        col_winner if col_winner else
-        0
-    )
 
 
 def game_loop():
