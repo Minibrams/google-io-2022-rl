@@ -12,7 +12,7 @@
 2. `code google-io-2022-rl`
 3. `Shift + CMD/CTRL + P -> Remote-Containers: Open Folder in Container`
 
-# Not using Docker
+## Not using Docker
 1. `git clone https://github.com/Minibrams/google-io-2022-rl.git`
 2. `code google-io-2022-rl`
 3. `python3 -m venv .venv` (in VS Code terminal)
