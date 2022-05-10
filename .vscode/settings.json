@@ -1,0 +1,10 @@
+{
+  "python.envFile": "${workspaceFolder}/.env",
+  "python.defaultInterpreterPath": "python",
+  "python.languageServer": "Pylance",
+  "terminal.integrated.env.linux": {
+    "PYTHONPATH": "${workspaceFolder}"
+  },
+  "editor.formatOnSave": true,
+  "files.autoSave": "afterDelay"
+}
