@@ -3,7 +3,7 @@
   "dockerComposeFile": [
     "./docker-compose.yml"
   ],
-  "service": "four-in-a-row",
+  "service": "connect-four",
   "workspaceFolder": "/workspace",
   "shutdownAction": "stopCompose",
   "extensions": [

@@ -2,6 +2,7 @@
   "python.envFile": "${workspaceFolder}/.env",
   "python.defaultInterpreterPath": "python",
   "python.languageServer": "Pylance",
+  "editor.tabSize": 4,
   "terminal.integrated.env.linux": {
     "PYTHONPATH": "${workspaceFolder}"
   },
