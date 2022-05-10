@@ -1,0 +1,19 @@
+{
+  "name": "google-io-2022-rl",
+  "dockerComposeFile": [
+    "./docker-compose.yml"
+  ],
+  "service": "four-in-a-row",
+  "workspaceFolder": "/workspace",
+  "shutdownAction": "stopCompose",
+  "extensions": [
+    "ms-python.python",
+    "ms-azuretools.vscode-docker",
+    "hnw.vscode-auto-open-markdown-preview"
+  ],
+  "runServices": [],
+  "remoteEnv": {},
+  "settings": {
+    "terminal.integrated.shell.linux": null
+  }
+}
