@@ -168,7 +168,11 @@ def game_loop():
 
     # If a model is saved, load it to play against it
     if path.exists(agent.save_to):
+        print(f'Loading existing model from {agent.save_to}...')
         agent.load()
+    else:
+        agent.epsilon = 1.0
+        print(f'No existing model found, using random agent...')
 
     while True:
         print()
