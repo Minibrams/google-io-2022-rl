@@ -157,13 +157,13 @@ def game_loop():
 
     agent = Agent(
         gamma=1,
-        epsilon=1.0,
+        epsilon=0.0,  # Never explore, only exploit
         alpha=0.0005,
         input_dims=rows * columns,
         n_actions=columns,
         memory_size=1000,
         batch_size=256,
-        epsilon_end=0.01
+        epsilon_end=0.0
     )
 
     # If a model is saved, load it to play against it
@@ -177,7 +177,10 @@ def game_loop():
 
         if player == player_one:
             # Let the model play
-            column = agent.choose_action(board, get_full_columns(board))
+            column = agent.choose_action(
+                board.flatten(),
+                get_full_columns(board)
+            )
             board = _drop_token(board, column, 1)
             print(f'{player} played: {column}')
         else:

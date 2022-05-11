@@ -40,6 +40,7 @@ class Agent:
         Explores or exploits the game state and returns the index
         of the column to place a token in on the game board.
         """
+        state = state[np.newaxis, :]
 
         # Explore or exploit?
         if random() < self.epsilon:
@@ -50,7 +51,7 @@ class Agent:
             ])
         else:
             # Exploit!
-            actions = self.Q_eval.predict([state])
+            actions = self.Q_eval.predict(state)
             actions[0][closed_columns] = -np.inf  # Do not allow illegal moves
             return np.argmax(actions)
 

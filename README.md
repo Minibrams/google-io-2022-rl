@@ -37,3 +37,12 @@ python game.py
 ```
 
 If a `dqn_model.h5` file exists, the model is loaded before game start. Otherwise, you will be playing against a newly instantiated (random) agent.
+
+# Test your model
+To test your trained model against a random agent, run:
+```
+python test.py
+```
+
+The model will be loaded from `dqn_model.h5`.
+The test will run 100 games against a random agent. The win rate will be reported at the end.
